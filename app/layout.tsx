@@ -7,7 +7,6 @@ import { type Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getServerSideConfig } from "./config/server";
 import { GoogleTagManager } from "@next/third-parties/google";
-import Script from 'next/script';
 
 const serverConfig = getServerSideConfig();
 
@@ -53,10 +52,6 @@ export default function RootLayout({
             <GoogleTagManager gtmId={serverConfig.gtmId} />
           </>
         )}
-        <Script
-          src="https://www.clarity.ms/tag/lmn3fvevlr"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );
