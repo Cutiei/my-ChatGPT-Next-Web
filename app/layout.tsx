@@ -12,7 +12,7 @@ import Script from "next/script"
 const serverConfig = getServerSideConfig();
 
 export const metadata: Metadata = {
-  title: "NextChat",
+  title: "不存在的人工智能",
   description: "Your personal ChatGPT Chat Bot.",
   viewport: {
     width: "device-width",
