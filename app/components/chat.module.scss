@@ -60,7 +60,7 @@
     align-items: center;
     height: 16px;
     //width: var(--icon-width);
-    width: 69px;
+    width: max(var(--full-width),60px);
     overflow: hidden;
 
     &:not(:last-child) {
