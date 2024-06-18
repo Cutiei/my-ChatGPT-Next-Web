@@ -290,7 +290,11 @@ export class ChatGPTApi implements LLMApi {
       options.onError?.(e as Error);
     }
   }*/
-  async chat(options: ChatOptions) {
+  
+
+
+
+async chat(options: ChatOptions) {
     const visionModel = isVisionModel(options.config.model);
     const messages = options.messages.map((v) => ({
       role: v.role,
@@ -330,7 +334,7 @@ export class ChatGPTApi implements LLMApi {
 
     // Retry logic
     let retryCount = 0;
-    const maxRetries = 2; // Maximum of 1 retry
+    const maxRetries = 2; // Maximum of 2 retries
 
     const makeRequest = async () => {
       try {
@@ -359,7 +363,15 @@ export class ChatGPTApi implements LLMApi {
               responseText += remainText;
               console.log("[Response Animation] finished");
               if (responseText?.length === 0) {
-                options.onError?.(new Error("empty response from server"));
+                if (retryCount < maxRetries) {
+                  console.log(
+                    `[Request] empty response, retrying... (${retryCount + 1}/${maxRetries})`,
+                  );
+                  retryCount++;
+                  makeRequest(); // Retry the request
+                } else {
+                  options.onError?.(new Error("empty response from server"));
+                }
               }
               return;
             }
@@ -480,7 +492,20 @@ export class ChatGPTApi implements LLMApi {
 
           const resJson = await res.json();
           const message = this.extractMessage(resJson);
-          options.onFinish(message);
+          
+          if (message.length === 0) {
+            if (retryCount < maxRetries) {
+              console.log(
+                `[Request] empty response, retrying... (${retryCount + 1}/${maxRetries})`,
+              );
+              retryCount++;
+              await makeRequest(); // Retry the request
+            } else {
+              options.onError?.(new Error("empty response from server"));
+            }
+          } else {
+            options.onFinish(message);
+          }
         }
       } catch (e) {
         console.log("[Request] failed to make a chat request", e);
@@ -500,6 +525,11 @@ export class ChatGPTApi implements LLMApi {
     // Initial request
     await makeRequest();
   }
+
+  
+  
+
+  
   async usage() {
     const formatDate = (d: Date) =>
       `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, "0")}-${d
