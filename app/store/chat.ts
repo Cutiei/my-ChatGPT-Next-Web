@@ -88,6 +88,7 @@ function createEmptySession(): ChatSession {
 
 function getSummarizeModel(currentModel: string) {
   // if it is using gpt-* models, force to use 3.5 to summarize
+  /*
   if (currentModel.startsWith("gpt")) {
     const configStore = useAppConfig.getState();
     const accessStore = useAccessStore.getState();
@@ -107,7 +108,8 @@ function getSummarizeModel(currentModel: string) {
   if (currentModel.startsWith("claude")) {
     return "claude-3-haiku";
   }
-  return currentModel;
+  return currentModel;*/
+  return GEMINI_SUMMARIZE_MODEL;
 }
 
 function countMessages(msgs: ChatMessage[]) {
