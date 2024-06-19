@@ -104,6 +104,9 @@ function getSummarizeModel(currentModel: string) {
   if (currentModel.startsWith("gemini")) {
     return GEMINI_SUMMARIZE_MODEL;
   }
+  if (currentModel.startsWith("claude")) {
+    return "claude-3-haiku";
+  }
   return currentModel;
 }
 
